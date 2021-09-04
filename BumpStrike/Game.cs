@@ -40,7 +40,7 @@ namespace BumpStrike {
 
 			Logic = new SequentialSystem<float>(
 				new PlayerInputSystem(World),
-				new PlayerPhysicsSystem(World, Grid)
+				new ActorPhysicsSystem(World, Grid)
 			);
 
 			var width = 256;
@@ -56,7 +56,7 @@ namespace BumpStrike {
 			Result = new SpriteBatch(GraphicsDevice);
 
 			var entity = World.CreateEntity();
-			entity.Set(Player.Create(8, 8));
+			entity.Set(Actor.Create(8, 8));
 			entity.Set(PlayerInput.Create());
 			entity.Set(Sprite.Create(PlayerGraphics, "stand"));
 		}
