@@ -1,0 +1,63 @@
+using System;
+
+namespace Basegame {
+
+	public struct Coord : IEquatable<Coord> {
+		public readonly long X;
+		public readonly long Y;
+
+		public readonly static Coord Zero = new Coord(0, 0);
+		public readonly static Coord One = new Coord(1, 1);
+		public readonly static Coord Left = new Coord(-1, 0);
+		public readonly static Coord Right = new Coord(1, 0);
+		public readonly static Coord Up = new Coord(0, -1);
+		public readonly static Coord Down = new Coord(0, 1);
+
+		public Coord(long x, long y) {
+			this.X = x;
+			this.Y = y;
+		}
+
+		public Coord(long[] pair) : this(pair[0], pair[1]) {}
+
+		public override int GetHashCode() => (int) (X * 6983 + Y * 4003);
+
+		public override bool Equals(object obj) => obj is Coord other && Equals(other);
+
+		public bool Equals(Coord other) => X == other.X && Y == other.Y;
+
+		public override string ToString() => $"Coord: {X}, {Y}";
+
+		public static bool operator ==(Coord left, Coord right) => left.Equals(right);
+
+		public static bool operator !=(Coord left, Coord right) => !left.Equals(right);
+
+		public static Coord operator +(Coord left, Coord right) => new Coord(left.X + right.X, left.Y + right.Y);
+		public static Coord operator -(Coord left, Coord right) => new Coord(left.X - right.X, left.Y - right.Y);
+
+		public static Coord operator *(Coord coord, int value) => new Coord(coord.X * value, coord.Y * value);
+
+		public static float Distance(Coord a, Coord b) {
+			return MathF.Sqrt(DistanceSquared(a, b));
+		}
+
+		public static float DistanceSquared(Coord a, Coord b) {
+			var x = a.X - b.X;
+			var y = a.Y - b.Y;
+			return x * x + y * y;
+		}
+
+		public static Coord Facing(Coord from, Coord to) {
+			var d = to - from;
+			var x = Math.Abs(d.X);
+			var y = Math.Abs(d.Y);
+			if (y > x) {
+				return new Coord(0, d.Y / y);
+			} else {
+				return new Coord(d.X / x, 0);
+			}
+		}
+
+	}
+
+}
