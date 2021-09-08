@@ -1,27 +1,23 @@
-using MonoGame.Aseprite.Documents;
+using System.Numerics;
 
 namespace BumpStrike {
 
 	public struct Actor {
-		public float X;
-		public float Y;
-		public float Width;
-		public float Height;
-		public float DX;
-		public float DY;
+		public Vector2 MoveInput;
 		public int Facing;
-		public const float AccelTime = 0.5f;
-		public const float MaxVelocity = 5;
-		public const float Friction = 5 / AccelTime;
-		public const float Accel = MaxVelocity * Friction;
+		public float AccelTime;
+		public float MaxVelocity;
+		public float Friction;
+		public float Accel;
 
-		public static Actor Create(float x, float y) {
+		public static Actor Create(float accelTime = 0.5f, float maxVelocity = 5) {
+			var friction = 5 / accelTime;
+			var accel = maxVelocity * friction;
 			return new Actor {
-				X = x,
-				Y = y,
-				Width = 0.5f,
-				Height = 0.9375f,
-				Facing = 1
+				AccelTime = accelTime,
+				MaxVelocity = maxVelocity,
+				Friction = friction,
+				Accel = accel
 			};
 		}
 

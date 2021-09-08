@@ -1,31 +1,43 @@
+using System.Numerics;
 using DefaultEcs;
 using DefaultEcs.System;
 using Microsoft.Xna.Framework.Input;
 
 namespace BumpStrike {
 
-	public class PlayerInputSystem : AComponentSystem<float, PlayerInput> {
+	public class PlayerInputSystem : AEntitySetSystem<float> {
 
-		public PlayerInputSystem(World world) : base(world) {}
+		public PlayerInputSystem(World world) : base(world
+			.GetEntities()
+			.With<Player>()
+			.With<Actor>()
+			.AsSet()
+		) {}
 
-		protected override void Update(float dt, ref PlayerInput input) {
+		protected override void Update(float dt, in Entity entity) {
+			ref var actor = ref entity.Get<Actor>();
+
 			var state = Keyboard.GetState();
 
+			var move = new Vector2();
+
 			if (state.IsKeyDown(Keys.A)) {
-				input.MoveX = -1;
+				move.X = -1;
 			} else if (state.IsKeyDown(Keys.D)) {
-				input.MoveX = 1;
+				move.X = 1;
 			} else {
-				input.MoveX = 0;
+				move.X = 0;
 			}
 
 			if (state.IsKeyDown(Keys.W)) {
-				input.MoveY = -1;
+				move.Y = -1;
 			} else if (state.IsKeyDown(Keys.S)) {
-				input.MoveY = 1;
+				move.Y = 1;
 			} else {
-				input.MoveY = 0;
+				move.Y = 0;
 			}
+
+			actor.MoveInput = move;
 		}
 
 	}

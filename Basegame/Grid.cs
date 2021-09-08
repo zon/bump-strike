@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using DefaultEcs;
 
@@ -59,6 +60,11 @@ namespace Basegame {
 			return false;
 		}
 
+		public bool IsSolid(float x, float y, float radius) {
+			var diameter = radius * 2;
+			return IsSolid(x - radius, y - radius, diameter, diameter);
+		}
+
 		// https://stackoverflow.com/a/3706260
 		public Node GetOpenNearby(EntityMap<Position> positions, long x, long y) {
 			long vx = 1;
@@ -92,6 +98,54 @@ namespace Basegame {
 
 		public Node GetOpenNearby(EntityMap<Position> positions, Coord coord) {
 			return GetOpenNearby(positions, coord.X, coord.Y);
+		}
+
+		public void Add(Entity entity, Bounds bounds) {
+			for (var y = bounds.Min.Y; y <= bounds.Max.Y; y++) {
+				for (var x = bounds.Min.X; x <= bounds.Max.X; x++) {
+					var node = Get(x, y);
+					node.Entities.Add(entity);
+				}
+			}
+		}
+
+		public HashSet<Entity> Get(Bounds bounds) {
+			var result = new HashSet<Entity>();
+			for (var y = bounds.Min.Y; y <= bounds.Max.Y; y++) {
+				for (var x = bounds.Min.X; x <= bounds.Max.X; x++) {
+					var node = Get(x, y);
+					foreach (var entity in node.Entities) {
+						result.Add(entity);
+					}
+				}
+			}
+			return result;
+		}
+
+		public void Move(Entity entity, Bounds from, Bounds to) {
+			for (var y = from.Min.Y; y <= from.Max.Y; y++) {
+				for (var x = from.Min.X; x <= from.Max.X; x++) {
+					if (to.Contains(x, y)) continue;
+					var node = Get(x, y);
+					node.Entities.Remove(entity);
+				}
+			}
+			for (var y = to.Min.Y; y <= to.Max.Y; y++) {
+				for (var x = to.Min.X; x <= to.Max.X; x++) {
+					if (from.Contains(x, y)) continue;
+					var node = Get(x, y);
+					node.Entities.Add(entity);
+				}
+			}
+		}
+
+		public void Remove(Entity entity, Bounds bounds) {
+			for (var y = bounds.Min.Y; y <= bounds.Max.Y; y++) {
+				for (var x = bounds.Min.X; x <= bounds.Max.X; x++) {
+					var node = Get(x, y);
+					node.Entities.Remove(entity);
+				}
+			}
 		}
 
 	}

@@ -1,8 +1,12 @@
+using System.Collections.Generic;
+using DefaultEcs;
+
 namespace Basegame {
 
 	public class Node {
 		public readonly Position Position;
 		public readonly bool Solid;
+		public readonly HashSet<Entity> Entities;
 
 		public Coord Coord {
 			get {
@@ -25,6 +29,7 @@ namespace Basegame {
 		public Node(Coord coord, bool solid) {
 			Position = new Position { Coord = coord };
 			Solid = solid;
+			Entities = new HashSet<Entity>();
 		}
 
 		public override string ToString() => $"Node {Position.Coord.X}, {Position.Coord.Y}";

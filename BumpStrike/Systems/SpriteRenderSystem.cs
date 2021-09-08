@@ -12,6 +12,8 @@ namespace BumpStrike {
 
 		public SpriteRenderSystem(World world, CameraView camera) : base(world
 			.GetEntities()
+			.With<Actor>()
+			.With<Body>()
 			.With<Sprite>()
 			.AsSet()
 		) {
@@ -19,16 +21,16 @@ namespace BumpStrike {
 		}
 
 		protected override void Update(float dt, in Entity entity) {
-			ref var input = ref entity.Get<PlayerInput>();
 			ref var actor = ref entity.Get<Actor>();
+			ref var body = ref entity.Get<Body>();
 			ref var sprite = ref entity.Get<Sprite>();
 
 			sprite.Update(dt);
 
 			var tag = "stand";
-			if (input.MoveX != 0 || input.MoveY != 0) {
+			if (actor.MoveInput.X != 0 || actor.MoveInput.Y != 0) {
 				tag = "walk";
-				sprite.FrameRate = Math.Max(Math.Abs(actor.DX), Math.Abs(actor.DY)) * 0.02f;
+				sprite.FrameRate = Math.Max(Math.Abs(body.Velocity.X), Math.Abs(body.Velocity.Y)) * 0.02f;
 			}
 			if (sprite.Tag.Name != tag) {
 				sprite.Play(tag);
@@ -40,8 +42,8 @@ namespace BumpStrike {
 			}
 
 			var frame = sprite.GetFrame();
-			var size = Camera.WorldToTarget(actor.Width, actor.Height);
-			var position = Camera.WorldToTarget(actor.X, actor.Y) + new Vector2(
+			var size = Camera.WorldToTarget(body.Radius, body.Radius) * 2;
+			var position = Camera.WorldToTarget(body.Position.ToXNA()) + new Vector2(
 				(size.X - frame.Width) / 2,
 				size.Y - frame.Height
 			);
