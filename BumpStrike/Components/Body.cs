@@ -11,7 +11,7 @@ namespace BumpStrike {
 		public Vector2 Impluse;
 		public Bounds Bounds;
 
-		public static Body Create(float x, float y, float radius = 0.4f) {
+		public static Body Create(float x, float y, float radius = 0.375f) {
 			var position = new Vector2(x, y);
 			return new Body {
 				Radius = radius,

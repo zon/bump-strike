@@ -1,7 +1,5 @@
 using DefaultEcs;
 using DefaultEcs.System;
-using Basegame;
-using System.Numerics;
 
 namespace BumpStrike {
 

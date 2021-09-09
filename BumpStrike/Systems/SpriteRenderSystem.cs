@@ -3,6 +3,7 @@ using DefaultEcs.System;
 using Microsoft.Xna.Framework;
 using Basegame.Client;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 
 namespace BumpStrike {
@@ -44,14 +45,14 @@ namespace BumpStrike {
 			var frame = sprite.GetFrame();
 			var size = Camera.WorldToTarget(body.Radius, body.Radius) * 2;
 			var position = Camera.WorldToTarget(body.Position.ToXNA()) + new Vector2(
-				(size.X - frame.Width) / 2,
-				size.Y - frame.Height
+				-frame.Width / 2,
+				size.Y / 2 - frame.Height
 			);
-			Camera.Batch.Draw(
-				sprite.Document.Texture,
-				position,
-				frame,
-				Color.White
+			Camera.Batch.DrawCircle(
+				Camera.WorldToTarget(body.Position.ToXNA()),
+				Camera.WorldToTarget(body.Radius, body.Radius).X,
+				16,
+				Color.Blue
 			);
 			Camera.Batch.Draw(
 				texture: sprite.Document.Texture, 

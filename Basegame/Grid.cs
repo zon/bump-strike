@@ -39,11 +39,11 @@ namespace Basegame {
 			}
 		}
 
-		public bool IsSolid(long x, long y) {
+		public bool PointIsSolid(long x, long y) {
 			return IsSolid(new Coord(x, y));
 		}
 
-		public bool IsSolid(float x, float y, float width, float height) {
+		public bool RectIsSolid(float x, float y, float width, float height) {
 			var ay = Calc.Floor(y);
 			var by = Calc.Floor(y + height);
 			if ((y + height) % 1 == 0) by -= 1;
@@ -52,7 +52,7 @@ namespace Basegame {
 			if ((x + width) % 1 == 0) bx -= 1;
 			for (var yy = ay; yy <= by; yy++) {
 				for (var xx = ax; xx <= bx; xx++) {
-					if (IsSolid(xx, yy)) {
+					if (PointIsSolid(xx, yy)) {
 						return true;
 					}
 				}
@@ -60,9 +60,9 @@ namespace Basegame {
 			return false;
 		}
 
-		public bool IsSolid(float x, float y, float radius) {
+		public bool RadiusIsSolid(float x, float y, float radius) {
 			var diameter = radius * 2;
-			return IsSolid(x - radius, y - radius, diameter, diameter);
+			return RectIsSolid(x - radius, y - radius, diameter, diameter);
 		}
 
 		// https://stackoverflow.com/a/3706260

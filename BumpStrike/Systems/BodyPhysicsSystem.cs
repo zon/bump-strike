@@ -26,7 +26,7 @@ namespace BumpStrike {
 			var velocity = body.Velocity;
 			var next = body.Position + body.Velocity * dt;
 
-			if (Grid.IsSolid(
+			if (Grid.RadiusIsSolid(
 				next.X,
 				position.Y,
 				body.Radius
@@ -34,12 +34,12 @@ namespace BumpStrike {
 				if (velocity.X > 0) {
 					position.X = Calc.Floor(next.X + body.Radius) - body.Radius;
 				} else if (velocity.X < 0) {
-					position.X = Calc.Floor(next.X - body.Radius) + body.Radius;
+					position.X = Calc.Floor(next.X - body.Radius) + 1 + body.Radius;
 				}
 				velocity.X = 0;
 			}
 			
-			if (Grid.IsSolid(
+			if (Grid.RadiusIsSolid(
 				position.X,
 				next.Y,
 				body.Radius
@@ -47,7 +47,7 @@ namespace BumpStrike {
 				if (velocity.Y > 0) {
 					position.Y = Calc.Floor(next.Y + body.Radius) - body.Radius;
 				} else if (velocity.Y < 0) {
-					position.Y = Calc.Floor(next.Y - body.Radius) + body.Radius;
+					position.Y = Calc.Floor(next.Y - body.Radius) + 1 + body.Radius;
 				}
 				velocity.Y = 0;
 			}

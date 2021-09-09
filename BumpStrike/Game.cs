@@ -41,7 +41,7 @@ namespace BumpStrike {
 			Logic = new SequentialSystem<float>(
 				new PlayerInputSystem(World),
 				new ActorPhysicsSystem(World),
-				new BodyCollisionSystem(World, Grid),
+				// new BodyCollisionSystem(World, Grid),
 				new BodyPhysicsSystem(World, Grid)
 			);
 
