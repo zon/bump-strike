@@ -65,6 +65,14 @@ namespace BumpStrike {
 				effects: effects,
 				layerDepth: 0
 			);
+
+			// var min = Camera.WorldToTarget(body.Bounds.Min.X, body.Bounds.Min.Y);
+			// var max = Camera.WorldToTarget(body.Bounds.Max.X + 1, body.Bounds.Max.Y + 1);
+			// Camera.Batch.DrawRectangle(
+			// 	min,
+			// 	max - min,
+			// 	Color.Yellow
+			// );
 		}
 
 	}

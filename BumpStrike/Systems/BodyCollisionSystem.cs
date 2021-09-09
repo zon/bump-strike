@@ -21,14 +21,15 @@ namespace BumpStrike {
 
 			var entities = Grid.Get(body.Bounds);
 			foreach (var otherEntity in entities) {
+				if (otherEntity == entity) continue;
 				var other = otherEntity.Get<Body>();
 				var minDistance = other.Radius + body.Radius;
 				var delta = other.Position - body.Position;
-				var distanceSqr = delta.LengthSquared();
-				if (distanceSqr >= minDistance * minDistance) continue;
+				var distance = delta.Length();
+				if (distance >= minDistance) continue;
 				var rv = other.Velocity - body.Velocity;
-				if (Vector2.Dot(rv, delta) < 0) continue;
-				body.Impluse -= rv;
+				if (Vector2.Dot(Vector2.Normalize(rv), Vector2.Normalize(delta)) > 0) continue;
+				body.Impluse += rv;
 			}
 
 		}

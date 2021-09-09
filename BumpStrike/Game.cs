@@ -41,7 +41,7 @@ namespace BumpStrike {
 			Logic = new SequentialSystem<float>(
 				new PlayerInputSystem(World),
 				new ActorPhysicsSystem(World),
-				// new BodyCollisionSystem(World, Grid),
+				new BodyCollisionSystem(World, Grid),
 				new BodyPhysicsSystem(World, Grid)
 			);
 
@@ -57,11 +57,16 @@ namespace BumpStrike {
 			
 			Result = new SpriteBatch(GraphicsDevice);
 
-			var entity = World.CreateEntity();
-			entity.Set(Body.Create(8, 8));
-			entity.Set(Actor.Create());
-			entity.Set(new Player());
-			entity.Set(Sprite.Create(PlayerGraphics, "stand"));
+			var player = World.CreateEntity();
+			player.Set(Body.Create(8, 8));
+			player.Set(Actor.Create());
+			player.Set(new Player());
+			player.Set(Sprite.Create(PlayerGraphics, "stand"));
+
+			var other = World.CreateEntity();
+			other.Set(Body.Create(6, 8));
+			other.Set(Actor.Create());
+			other.Set(Sprite.Create(PlayerGraphics, "stand"));
 		}
 
 		protected override void Update(GameTime gameTime) {
