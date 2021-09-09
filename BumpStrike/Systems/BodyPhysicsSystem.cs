@@ -22,35 +22,37 @@ namespace BumpStrike {
 			body.Velocity += body.Impluse;
 			body.Impluse = Vector2.Zero;
 
-			var nx = body.Position.X + body.Velocity.X * dt;
+			var position = body.Position;
+			var velocity = body.Velocity;
+			var next = body.Position + body.Velocity * dt;
+
 			if (Grid.IsSolid(
-				nx,
-				body.Position.Y,
+				next.X,
+				position.Y,
 				body.Radius
 			)) {
-				if (body.Velocity.X > 0) {
-					body.Position.X = Calc.Floor(nx + body.Radius) - body.Radius;
-				} else if (body.Velocity.X < 0) {
-					body.Position.X = Calc.Floor(nx - body.Radius) + body.Radius;
+				if (velocity.X > 0) {
+					position.X = Calc.Floor(next.X + body.Radius) - body.Radius;
+				} else if (velocity.X < 0) {
+					position.X = Calc.Floor(next.X - body.Radius) + body.Radius;
 				}
-				body.Velocity.X = 0;
+				velocity.X = 0;
 			}
 			
-			var ny = body.Position.Y + body.Velocity.Y * dt;
 			if (Grid.IsSolid(
-				body.Position.X,
-				ny,
+				position.X,
+				next.Y,
 				body.Radius
 			)) {
-				if (body.Velocity.Y > 0) {
-					body.Position.Y = Calc.Floor(ny + body.Radius) - body.Radius;
-				} else if (body.Velocity.Y < 0) {
-					body.Position.Y = Calc.Floor(ny - body.Radius) + body.Radius;
+				if (velocity.Y > 0) {
+					position.Y = Calc.Floor(next.Y + body.Radius) - body.Radius;
+				} else if (velocity.Y < 0) {
+					position.Y = Calc.Floor(next.Y - body.Radius) + body.Radius;
 				}
-				body.Velocity.Y = 0;
+				velocity.Y = 0;
 			}
 
-			body.Position += body.Velocity * dt;
+			body.Position = position + velocity * dt;
 
 			var bounds = Bounds.Create(body.Position, body.Radius);
 			if (bounds == body.Bounds) return;

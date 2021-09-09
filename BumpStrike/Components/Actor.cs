@@ -4,7 +4,7 @@ namespace BumpStrike {
 
 	public struct Actor {
 		public Vector2 MoveInput;
-		public int Facing;
+		public float Facing;
 		public float AccelTime;
 		public float MaxVelocity;
 		public float Friction;

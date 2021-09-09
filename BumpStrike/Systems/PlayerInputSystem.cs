@@ -37,7 +37,11 @@ namespace BumpStrike {
 				move.Y = 0;
 			}
 
-			actor.MoveInput = move;
+			if (move.X != 0 || move.Y != 0) {
+				actor.MoveInput = Vector2.Normalize(move);
+			} else {
+				actor.MoveInput = Vector2.Zero;
+			}
 		}
 
 	}
