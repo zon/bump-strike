@@ -4,34 +4,34 @@ using Microsoft.Xna.Framework;
 using Basegame.Client;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
-using System;
 
 namespace BumpStrike {
 
-	public class SpriteRenderSystem : AEntitySetSystem<float> {
+	public class ActorRenderSystem : AEntitySetSystem<float> {
 		readonly CameraView Camera;
 
-		public SpriteRenderSystem(World world, CameraView camera) : base(world
+		public ActorRenderSystem(World world, CameraView camera) : base(world
 			.GetEntities()
+			.With<ActorView>()
+			.With<Sprite>()
 			.With<Actor>()
 			.With<Body>()
-			.With<Sprite>()
 			.AsSet()
 		) {
 			Camera = camera;
 		}
 
 		protected override void Update(float dt, in Entity entity) {
+			ref var view = ref entity.Get<ActorView>();
+			ref var sprite = ref entity.Get<Sprite>();
 			ref var actor = ref entity.Get<Actor>();
 			ref var body = ref entity.Get<Body>();
-			ref var sprite = ref entity.Get<Sprite>();
 
 			sprite.Update(dt);
 
 			var tag = "stand";
 			if (actor.MoveInput.X != 0 || actor.MoveInput.Y != 0) {
 				tag = "walk";
-				sprite.FrameRate = Math.Max(Math.Abs(body.Velocity.X), Math.Abs(body.Velocity.Y)) * 0.02f;
 			}
 			if (sprite.Tag.Name != tag) {
 				sprite.Play(tag);
@@ -48,12 +48,20 @@ namespace BumpStrike {
 				-frame.Width / 2,
 				size.Y / 2 - frame.Height
 			);
-			Camera.Batch.DrawCircle(
-				Camera.WorldToTarget(body.Position.ToXNA()),
-				Camera.WorldToTarget(body.Radius, body.Radius).X,
-				16,
-				Color.Blue
-			);
+
+			if (sprite.Tag.Name == "walk") {
+				var speed = (position - view.Previous).Length() / dt;
+				sprite.FrameRate = speed / 2;
+			}
+			view.Previous = position;
+
+			// Camera.Batch.DrawCircle(
+			// 	Camera.WorldToTarget(body.Position.ToXNA()),
+			// 	Camera.WorldToTarget(body.Radius, body.Radius).X,
+			// 	16,
+			// 	Color.Blue
+			// );
+
 			Camera.Batch.Draw(
 				texture: sprite.Document.Texture, 
 				position: position,

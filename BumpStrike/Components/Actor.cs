@@ -10,7 +10,7 @@ namespace BumpStrike {
 		public float Friction;
 		public float Accel;
 
-		public static Actor Create(float accelTime = 0.5f, float maxVelocity = 5) {
+		public static Actor Create(float accelTime = 0.5f, float maxVelocity = 3) {
 			var friction = 5 / accelTime;
 			var accel = maxVelocity * friction;
 			return new Actor {

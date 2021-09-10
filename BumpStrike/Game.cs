@@ -50,7 +50,7 @@ namespace BumpStrike {
 			Camera = new CameraView(Window, GraphicsDevice, new Point(width, height), 16, 4);
 			BackgroundRendering = new LdtkDrawSystem(LevelResources, Camera);
 			ForegroundRendering  = new SequentialSystem<float>(
-				new SpriteRenderSystem(World, Camera)
+				new ActorRenderSystem(World, Camera)
 			);
 
 			Camera.SetWindow(Graphics);
@@ -61,11 +61,13 @@ namespace BumpStrike {
 			player.Set(Body.Create(8, 8));
 			player.Set(Actor.Create());
 			player.Set(new Player());
+			player.Set(new ActorView());
 			player.Set(Sprite.Create(PlayerGraphics, "stand"));
 
 			var other = World.CreateEntity();
 			other.Set(Body.Create(6, 8));
 			other.Set(Actor.Create());
+			other.Set(new ActorView());
 			other.Set(Sprite.Create(PlayerGraphics, "stand"));
 		}
 

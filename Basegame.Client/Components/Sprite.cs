@@ -1,6 +1,5 @@
 using MonoGame.Aseprite.Documents;
 using Microsoft.Xna.Framework;
-using Basegame;
 
 namespace Basegame.Client {
 
@@ -31,7 +30,7 @@ namespace Basegame.Client {
 
 		public void Update(float dt) {
 			if (FrameRate <= 0.001f) return;
-			Interval += dt / FrameRate;
+			Interval += FrameRate * dt;
 			if (Interval < 1) return;
 			var d = Calc.Floor(Interval);
 			Interval = Interval % 1;
