@@ -5,6 +5,7 @@ using DefaultEcs;
 using DefaultEcs.System;
 using Basegame;
 using Basegame.Client;
+using System;
 
 namespace BumpStrike {
 
@@ -14,10 +15,12 @@ namespace BumpStrike {
 		AsepriteDocument PlayerGraphics;
 		LevelResources LevelResources;
 		Grid Grid;
-		CameraView Camera;
 		ISystem<float> Logic;
 		ISystem<float> BackgroundRendering;
 		ISystem<float> ForegroundRendering;
+		ActorSubscriber ActorSubscriber;
+		IDisposable ActorSubscription;
+		CameraView Camera;
 		SpriteBatch Result;
 
 		public Game() {
@@ -28,6 +31,9 @@ namespace BumpStrike {
 
 		protected override void Initialize() {
 			World = new World();
+
+			ActorSubscriber = new ActorSubscriber();
+			ActorSubscription = World.Subscribe(ActorSubscriber);
 
 			base.Initialize();
 		}

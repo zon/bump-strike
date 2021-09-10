@@ -43,6 +43,8 @@ namespace BumpStrike {
 				var impulse = normal * j;
 
 				body.Impulse += impulse * invMass * -1;
+
+				World.Publish(new Collision(entity, otherEntity));
 			}
 
 		}
