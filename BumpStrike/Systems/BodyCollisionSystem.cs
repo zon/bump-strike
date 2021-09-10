@@ -27,8 +27,12 @@ namespace BumpStrike {
 				var delta = other.Position - body.Position;
 				var distance = delta.Length();
 				if (distance >= minDistance) continue;
-				var rv = other.Velocity - body.Velocity;
+
+				var overlap = minDistance - distance;
 				var normal = Vector2.Normalize(delta);
+				body.Impulse += (normal * -overlap / 2) / dt;
+
+				var rv = other.Velocity - body.Velocity;
 				if (Vector2.Dot(rv, normal) > 0) continue;
 				
 				var resitution = 1f;
@@ -38,7 +42,7 @@ namespace BumpStrike {
 				var j = n / invMassSum;
 				var impulse = normal * j;
 
-				body.Impulse += impulse * invMass * -1f;
+				body.Impulse += impulse * invMass * -1;
 			}
 
 		}
