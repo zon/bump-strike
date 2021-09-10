@@ -8,7 +8,7 @@ namespace BumpStrike {
 		public float Mass;
 		public Vector2 Position;
 		public Vector2 Velocity;
-		public Vector2 Impluse;
+		public Vector2 Impulse;
 		public Bounds Bounds;
 
 		public static Body Create(float x, float y, float radius = 0.375f) {

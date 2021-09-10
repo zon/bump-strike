@@ -19,8 +19,8 @@ namespace BumpStrike {
 		protected override void Update(float dt, in Entity entity) {
 			ref var body = ref entity.Get<Body>();
 			
-			body.Velocity += body.Impluse;
-			body.Impluse = Vector2.Zero;
+			body.Velocity += body.Impulse;
+			body.Impulse = Vector2.Zero;
 
 			var position = body.Position;
 			var velocity = body.Velocity;

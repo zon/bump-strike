@@ -28,8 +28,17 @@ namespace BumpStrike {
 				var distance = delta.Length();
 				if (distance >= minDistance) continue;
 				var rv = other.Velocity - body.Velocity;
-				if (Vector2.Dot(Vector2.Normalize(rv), Vector2.Normalize(delta)) > 0) continue;
-				body.Impluse += rv;
+				var normal = Vector2.Normalize(delta);
+				if (Vector2.Dot(rv, normal) > 0) continue;
+				
+				var resitution = 1f;
+				var invMass = -1f;
+				var invMassSum = invMass + invMass;
+				var n = -(1 + resitution) * Vector2.Dot(rv, normal);
+				var j = n / invMassSum;
+				var impulse = normal * j;
+
+				body.Impulse += impulse * invMass * -1f;
 			}
 
 		}
