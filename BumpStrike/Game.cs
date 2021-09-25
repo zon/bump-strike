@@ -12,7 +12,7 @@ namespace BumpStrike {
 	public class Game : Microsoft.Xna.Framework.Game {
 		World World;
 		GraphicsDeviceManager Graphics;
-		AsepriteDocument PlayerGraphics;
+		ContentArchive Archive;
 		LevelResources LevelResources;
 		Grid Grid;
 		ISystem<float> Logic;
@@ -39,14 +39,15 @@ namespace BumpStrike {
 		}
 
 		protected override void LoadContent() {
-			PlayerGraphics = Content.Load<AsepriteDocument>("big-jumper");
+			Archive = new ContentArchive(Content);
 
 			LevelResources = LevelResources.Load(Content, "test");
 			Grid = new Grid(LevelResources.World);
 
 			Logic = new SequentialSystem<float>(
 				new PlayerInputSystem(World),
-				new ActorPhysicsSystem(World),
+				new ActorSystem(World),
+				new RunnerSystem(World),
 				new BodyCollisionSystem(World, Grid),
 				new BodyPhysicsSystem(World, Grid)
 			);
@@ -56,7 +57,7 @@ namespace BumpStrike {
 			Camera = new CameraView(Window, GraphicsDevice, new Point(width, height), 16, 4);
 			BackgroundRendering = new LdtkDrawSystem(LevelResources, Camera);
 			ForegroundRendering  = new SequentialSystem<float>(
-				new ActorRenderSystem(World, Camera)
+				new ActorRenderSystem(World, Archive, Camera)
 			);
 
 			Camera.SetWindow(Graphics);
@@ -65,16 +66,26 @@ namespace BumpStrike {
 
 			var player = World.CreateEntity();
 			player.Set(Body.Create(8, 8));
-			player.Set(Actor.Create());
+			player.Set(Runner.Create());
+			player.Set(new Actor {
+				Attack = new Attack {
+					Cooldown = 1
+				}
+			});
 			player.Set(new Player());
 			player.Set(new ActorView());
-			player.Set(Sprite.Create(PlayerGraphics, "stand"));
+			player.Set(Sprite.Create(Archive.Player, "stand"));
 
 			var other = World.CreateEntity();
 			other.Set(Body.Create(6, 8));
-			other.Set(Actor.Create());
+			other.Set(Runner.Create());
+			other.Set(new Actor {
+				Attack = new Attack {
+					Cooldown = 1
+				}
+			});
 			other.Set(new ActorView());
-			other.Set(Sprite.Create(PlayerGraphics, "stand"));
+			other.Set(Sprite.Create(Archive.Player, "stand"));
 		}
 
 		protected override void Update(GameTime gameTime) {

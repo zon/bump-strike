@@ -10,12 +10,12 @@ namespace BumpStrike {
 		public PlayerInputSystem(World world) : base(world
 			.GetEntities()
 			.With<Player>()
-			.With<Actor>()
+			.With<Runner>()
 			.AsSet()
 		) {}
 
 		protected override void Update(float dt, in Entity entity) {
-			ref var actor = ref entity.Get<Actor>();
+			ref var actor = ref entity.Get<Runner>();
 
 			var state = Keyboard.GetState();
 

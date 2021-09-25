@@ -1,3 +1,4 @@
+using System;
 using DefaultEcs;
 
 namespace BumpStrike {
@@ -7,9 +8,13 @@ namespace BumpStrike {
         [Subscribe]
         void On(in Collision collision) {
             ref var actor = ref collision.A.Get<Actor>();
-            ref var body = ref collision.A.Get<Body>();
-            ref var otherActor = ref collision.A.Get<Actor>();
-            ref var otherBody = ref collision.A.Get<Body>();
+            if (!actor.IsReady) return;
+
+            // ref var body = ref collision.A.Get<Body>();
+            // ref var otherActor = ref collision.B.Get<Actor>();
+            // ref var otherBody = ref collision.B.Get<Body>();
+
+            actor.Cooldown = actor.Attack.Cooldown;
         }
 
     }
